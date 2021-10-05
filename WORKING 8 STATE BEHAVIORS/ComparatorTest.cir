@@ -1,0 +1,45 @@
+*Sample-and-Hold (Behavioral Model)
+
+.include CLK_SH.cir
+.include SAR.cir
+.include ltspice_DAC_behavioral.cir
+.include EDGETRIGGER.cir
+
+.options plotwinsize=0
+
+
+Vref vref 0 DC 5
+Vdd vdd 0 DC 5
+
+Vin Vin 0 DC 0 SIN 2.5 2.5 15k
+V1 v 0 DC 2.3
+Vclock CLK 0 DC 0 PULSE 0 5 0 0 0  2u 4u
+
+VSET   SET 0 DC 0
+VRESET RESET 0 DC 0
+
+
+
+
+X_DIVIDER	   CLK 	SET 	RESET 	CLK2	CLK8 		CLKDIV
+X_mySampleHold Vin  SH      CLK     SampleHold
+*X_buffer SH OUT BUFF1
+
+
+A_mycomp	 v     SH     0	   0 	0 	   Vnot  Vcom  0	  SCHMITT 	   Vhigh=5V 	 vlow=0 Tau=3u Vt=0
+*X_buffer1 	 Vcom OUT BUFF
+
+A_myFlipFlop Vcom  0      CLK  0 	0  	   QBAR  Q 	   0    DFLOP       Vhigh=5 	 Vlow=0 Tau=1n
+
+
+
+.tran 0.01u 100u 0.1u
+
+
+.END
+
+
+
+
+
+

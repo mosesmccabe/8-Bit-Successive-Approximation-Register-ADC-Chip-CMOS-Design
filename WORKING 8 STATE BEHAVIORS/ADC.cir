@@ -1,0 +1,40 @@
+*Sample-and-Hold (Behavioral Model)
+
+.include CLK_SH.cir
+.include SAR.cir
+.include ltspice_DAC_behavioral.cir
+.include EDGETRIGGER.cir
+
+.options plotwinsize=0
+
+
+Vref vref 0 DC 5
+Vdd vdd 0 DC 5
+
+Vin Vin 0 DC 0 SIN 2.5 2.5 100k
+V1     v   0 DC 2.3
+Vclock CLK 0 DC 0  PULSE 0 5 0 0 0  .1u .2u
+VSET   SET 0 DC 0
+VRESET RESET 0  DC 0
+
+X_mySampleHold Vin SH CLK8 SampleHold
+
+A_mycomp	 SH 	dout     0	  0 	0 	   Vnot  Vcom  0	SCHMITT 	Vhigh=5V 	 vlow=0 Tau=10n Vt=0
+*A_myFlipFlop Vcom  0      CLK    0 	0  	   QBAR  Q 	   0    DFLOP       Vhigh=5 	 Vlow=0 Tau=10n
+
+X_DIVIDER	CLK 	SET 	RESET 	CLK2	CLK8 		CLKDIV
+X_RESET		vdd 	CLK8 	res 	EDGETRIGGER
+
+*			 v+	    v-	  0    0    0      Vcom  out   0    SCHMITT		Vhigh=5		 Vlow=0	Tau=10n Vt=0
+*A_mycomp	 dout    v   0	   0 	0 	   Vnot  Vcom  0	SCHMITT 	Vhigh=5V 	 vlow=0 	Tau=10n Vt=0
+
+
+*			 D 	   0 	  CLK     SET   RESET  QBAR    Q 	   0 	  DFLOP 		Vhigh=5      Vlow=0		Tau=10n
+A_myFlipFlop Vcom  0      CLK     0 	0  	   QBAR    Q 	   0      DFLOP         Vhigh=5 	 Vlow=0 	Tau=10n
+*			 clk   reset  comp    D0    D1     D2      D3      D4     D5            D6           D7
+X_mySAR 	 CLK   res    Q	      D0 	D1 	   D2      D3      D4     D5 			D6 			 D7 		SAR1
+*			 VDD   VREF   Vout    B8    B7     B6      B5      B4     B3            B2           B1
+X_myDAC 	 vdd   vref   dout    D7 	D6     D5      D4      D3     D2 			D1 			 D0 		DAC8bit
+*X_myDAC 	 vdd   vref   dout    D7 	D6     D5      D4      D3     D 			D6 			 D7 		DAC8bit
+.tran 0.1u 50u 0.1u
+.END

@@ -1,0 +1,37 @@
+
+
+**A_myFlipFlop D 0 CLK SET RESET QBAR Q 0 DFLOP Vhigh = 5 Vlow=0 Tau=10n
+*Vclock CLK 0 DC 0 PULSE 0 5 0 0 0 1 2
+*Vset SET 0 DC 0V
+
+
+*Vreset RESET 0 DC 0V
+*VSET SET 0 DC 0
+*VRESET RESET 0 DC 0
+
+.subckt CLKDIV CLK SET RESET Q1 OUT
+
+A_Dflop1 Qbar1 0 CLK SET RESET Qbar1 Q1 0 DFLOP Vhigh = 5 Vlow = 0 Tau = 10n
+A_Dflop2 Qbar2 0 Q1 SET RESET Qbar2 Q2 0 DFLOP Vhigh = 5 Vlow = 0 Tau = 10n
+A_Dflop3 Qbar3 0 Q2 SET RESET Qbar3 OUT 0 DFLOP Vhigh = 5 Vlow = 0 Tau = 10n
+
+.end
+
+.subckt SampleHold Vin Vout CLK
+
+Vtrip Vtrip 0 DC 2.5
+Ein Vinbuf 0 Vin Vinbuf 100meg
+S1 Vinbuf VinS Vtrip CLK switmod
+Cs1 VinS 0 1e-10
+S2 VinS Vout1 CLK Vtrip switmod
+Cout1 Vout1 0 1e-16
+Eout Vout 0 Vout1 Vout 100meg
+***A_mycomp Vout
+.MODEL switmod SW
+
+.ends
+
+*VSET SET 0 DC 0
+*VRESET RESET 0 DC 0
+*X_myDivider CLK SET RESET OUT CLKDIV
+*.TRAN 0.01 20 0 UIC

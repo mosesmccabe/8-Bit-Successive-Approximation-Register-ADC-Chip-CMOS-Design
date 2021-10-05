@@ -1,0 +1,38 @@
+Sample-and-Hold (Behavioral Model)
+
+.options plotwinsize=0
+
+
+*** Start Ideal Sample-and-Hold Subcircuit ********************************************
+
+.subckt SampleHold Vin Vout CLK
+
+Vtrip Vtrip 0 DC 2.5
+Ein Vinbuf 0 Vin Vinbuf 100meg
+S1 Vinbuf VinS Vtrip CLK switmod
+Cs1 VinS 0 1e-10
+S2 VinS Vout1 CLK Vtrip switmod
+Cout1 Vout1 0 1e-16
+Eout Vout 0 Vout1 Vout 100meg
+***A_mycomp Vout
+.MODEL switmod SW
+
+.ends
+
+*** END Sample-and-Hold Subcircuit ***************************************************
+
+.TRAN 0.1n 500n 0.1n UIC
+Vin Vin 0 DC 0 SIN 2.5 2.5 5meg
+Vclock CLK 0 DC 0 PULSE 0 5 0 0 0 4n 8n
+
+X_mySampleHold Vin Vout CLK SampleHold
+
+
+
+.END
+
+
+
+
+
+

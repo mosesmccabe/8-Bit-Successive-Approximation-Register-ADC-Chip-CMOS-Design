@@ -1,0 +1,34 @@
+* SAR Circuit
+*
+* my_Dflip D 0 clk set   reset Qnot q 0 Dflop Vhigh=5 Vlow=0 Tav=10n
+*
+A_DFlip1   0 0 clk reset reset  0   1 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip2   1 0 clk 0	 reset  0   2 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip3   2 0 clk 0     reset  0   3 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip4   3 0 clk 0     reset  0   4 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip5   4 0 clk 0     reset  0   5 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip6   5 0 clk 0     reset  0   6 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip7   6 0 clk 0     reset  0   7 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip8   7 0 clk 0     reset  0   8 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip9   8 0 clk 0     reset  0   9 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+
+*
+* my_Dflip D   0 clk set   reset Qnot q 0 Dflop Vhigh=5 Vlow=0 Tav=10n
+*
+A_DFlip1b comp 0 D6  1     reset  0   D7 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip2b comp 0 D5  2     reset  0   D6 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip3b comp 0 D4  3     reset  0   D5 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip4b comp 0 D3  4     reset  0   D4 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip5b comp 0 D2  5     reset  0   D3 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip6b comp 0 D1  6     reset  0   D2 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip7b comp 0 D0  7     reset  0   D1 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip8b comp 0 DA  8     reset  0   D0 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+A_DFlip9b   0  0  0  9     reset  0   DA 0 DFLOP Vhigh=5 Vlow=0 Tau=10n
+
+* Clock
+Vclock clk 0 DC 0 PULSE 0 5 0 0 0 4 8
+Vset Vo 0 DC 0V
+Vreset reset 0 PULSE(0 5 0 0 0 0.01 8)
+
+
+.TRAN 0.01 20 0 UIC

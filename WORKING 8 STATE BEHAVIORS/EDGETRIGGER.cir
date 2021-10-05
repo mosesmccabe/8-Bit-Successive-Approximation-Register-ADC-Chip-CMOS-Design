@@ -1,0 +1,35 @@
+
+
+
+*VDD vd 0 DC 5
+*VCLK1 CLK 0 DC 0 PULSE 0 5 0 0 0 1 2
+
+.subckt EDGETRIGGER Vdd CLK1 Q
+
+Vset s 0 DC 0
+
+
+
+A_dflip  Vdd 	0 	CLK1 s  G2 Qnot  Q 0 	Dflop Vhigh=5 Vlow=0 Tau=10n
+A_myNot1 Q 	 	0	0 	 0 	0    G1    0 0 	BUF   Vhigh=5 Vlow =0 Tau= 10n
+A_myNot2 G1  	0   0    0  0    G2    0 0  BUF   Vhigh=5 Vlow =0 Tau=10n
+*A_myNot3 G2		0   0    0  0    G3   0 0   BUF Vhigh=5 Vlow =0 Tau=10n
+*A_myNot4 G3     0   0    0  0 	 G4  0 0 BUF Vhigh=5 Vlow =0 Tau=10n
+
+
+.ends
+
+*.subckt EDGETRIGGER1 CLK2 NOT1 NOT2 NOT3 DELAY ROUT
+
+
+
+*A_myNot1 CLK2 0 0 0 0 NOT1 0 0 BUF Vhigh=5 Vlow =0 Tau=10n
+*A_myNot2 NOT1 0 0 0 0 NOT2 0 0 BUF Vhigh=5 Vlow =0 Tau=10n
+*A_myNot3 NOT2 0 0 0 0 DELAY 0 0 BUF Vhigh=5 Vlow =0 Tau=10n
+*A_AND1	 CLK2 DELAY 0 0 0 ANOT ROUT 0 AND Vhigh=5 Vlow=0 Tau=10n
+
+*.ends
+
+*X_myReset vd CLK Q  EDGETRIGGER
+
+*.tran .001 20 .1 UIC

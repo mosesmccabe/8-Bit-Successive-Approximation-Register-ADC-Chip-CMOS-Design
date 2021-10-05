@@ -1,0 +1,60 @@
+
+*8-bit DAC (Behavioral Model)
+
+.options plotwinsize=0
+
+*** Start Ideal 8-bt DAC Subcircuit ********************************************
+
+.subckt DAC8bit VDD VREF Vout B8 B7 B6 B5 B4 B3 B2 B1
+
+*Generate Logic switching point, or trip, voltage
+R1 VDD trip 100meg
+R2 trip 0 100meg
+
+*Change input logic signals into logic 0s or 1s
+X8 trip B8 B8L Bitlogic
+X7 trip B7 B7L Bitlogic
+X6 trip B6 B6L Bitlogic
+X5 trip B5 B5L Bitlogic
+X4 trip B4 B4L Bitlogic
+X3 trip B3 B3L Bitlogic
+X2 trip B2 B2L Bitlogic
+X1 trip B1 B1L Bitlogic
+
+*Nonlinear dependent source, B, for generating the DAC output
+Bout Vout 0 V=(v(vref)/256)*(v(B8L)*128+v(B7L)*64+v(B6L)*32+v(B5L)*16+v(B4L)*8+v(B3L)*4+v(B2L)*2+v(B1L))
+
+.ends
+
+.subckt Bitlogic trip BX BXL
+Vone one 0 DC 1
+SH one BXL BX trip Switmod
+SL 0 BXL trip BX Switmod
+.model Switmod SW
+.ends
+
+*** END DAC Subcircuit *******************************************************************************
+
+
+******************************************************************************************************
+** Simulating DAC
+
+*VDD vdd 0 DC 5
+*VREF vref 0 DC 5
+
+*X_myDAC vdd vref vout B8 B7 B6 B5 B4 B3 B2 B1 DAC8bit
+
+*VB8 B8 0 DC 5
+*VB7 B7 0 DC 5
+*VB6 B6 0 DC 0
+*VB5 B5 0 DC 0
+*VB4 B4 0 DC 0
+*VB3 B3 0 DC 0
+*VB2 B2 0 DC 5
+*VB1 B1 0 DC 5
+
+*.op
+*******************************************************************************************************
+
+
+*.end
